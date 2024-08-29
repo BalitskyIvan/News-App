@@ -1,4 +1,4 @@
-package balitsky.newsapp.data.model
+package balitsky.newsapp.data.api.model
 
 data class NewsDTO(
     val articles: List<ArticlesDTO>
@@ -7,7 +7,7 @@ data class NewsDTO(
 data class ArticlesDTO(
     val title: String,
     val description: String,
-    val content: String,
-    val urlToImage: String,
+    val content: String? = null,
+    val urlToImage: String? = null,
     val publishedAt: String
 )
