@@ -2,7 +2,7 @@ package balitsky.newsapp.data.db
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import balitsky.newsapp.data.model.NewsDBO
+import balitsky.newsapp.data.db.model.NewsDBO
 
 @Database(entities = [NewsDBO::class], version = 1, exportSchema = false)
 abstract class NewsDatabase : RoomDatabase() {

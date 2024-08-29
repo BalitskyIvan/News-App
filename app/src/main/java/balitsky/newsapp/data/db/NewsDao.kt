@@ -3,7 +3,7 @@ package balitsky.newsapp.data.db
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import balitsky.newsapp.data.model.NewsDBO
+import balitsky.newsapp.data.db.model.NewsDBO
 
 @Dao
 interface NewsDao {

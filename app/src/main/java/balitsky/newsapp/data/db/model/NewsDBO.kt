@@ -1,4 +1,4 @@
-package balitsky.newsapp.data.model
+package balitsky.newsapp.data.db.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
