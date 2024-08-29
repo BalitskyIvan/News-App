@@ -7,6 +7,7 @@ import balitsky.newsapp.data.api.model.NewsDTO
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.update
 import java.util.UUID
 
 class NewsRepositoryImpl(
@@ -14,13 +15,16 @@ class NewsRepositoryImpl(
     private val newsDatabase: NewsDatabase
 ) : NewsRepository {
 
-    private val news = MutableStateFlow<List<NewsDBO>>(listOf())
+    private val cachedNewsState = MutableStateFlow<List<NewsDBO>>(listOf())
 
     override suspend fun fetchNews(isForced: Boolean): Flow<Result<List<NewsDBO>>> {
         return flow {
             emit(Result.Loading)
             if (!isForced) {
-                emit(Result.Success(newsDatabase.newsDao().getAll()))
+                val cachedNews = newsDatabase.newsDao().getAll()
+
+                cachedNewsState.update { cachedNews }
+                emit(Result.Success(cachedNews))
             }
             try {
                 emit(getNewsFromApi())
@@ -31,7 +35,7 @@ class NewsRepositoryImpl(
     }
 
     override suspend fun getNewsDetails(id: String): NewsDBO? {
-        return news.value.find { it.id == id }
+        return cachedNewsState.value.find { it.id == id }
     }
 
     private suspend fun getNewsFromApi(): Result<List<NewsDBO>> {
@@ -41,7 +45,9 @@ class NewsRepositoryImpl(
             val news = fetchedNewsResult.body()?.toDBO()
 
             news?.let {
+                newsDatabase.clearAllTables()
                 newsDatabase.newsDao().saveAll(news)
+                cachedNewsState.update { news }
             }
             Result.Success(news ?: emptyList())
         } else {
@@ -55,7 +61,7 @@ class NewsRepositoryImpl(
                 id = UUID.randomUUID().toString(),
                 title = article.title,
                 urlToImage = article.urlToImage ?: "",
-                description = article.description,
+                description = article.description ?: "",
                 content = article.content ?: "",
                 publishedAt = article.publishedAt
             )
