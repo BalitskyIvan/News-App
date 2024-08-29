@@ -1,4 +1,4 @@
-package balitsky.newsapp.ui.theme
+package balitsky.newsapp.presentation.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
