@@ -26,7 +26,10 @@ fun NavigationStack() {
                 }
             )
         ) {
-            DetailsScreen(id = it.arguments?.getString("id") ?: "")
+            DetailsScreen(
+                navController = navController,
+                id = it.arguments?.getString("id") ?: ""
+            )
         }
     }
 }

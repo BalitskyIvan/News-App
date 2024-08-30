@@ -23,7 +23,11 @@ class GetNewsUseCase @Inject constructor(
             .fetchNews(isForced)
             .map { result ->
                 when (result) {
-                    is Result.Success -> UiState.Success(result.data.filter { it.urlToImage.isNotEmpty() }.toNewsModel())
+                    is Result.Success -> UiState.Success(
+                        data = result.data
+                            .filter { it.urlToImage.isNotEmpty() }
+                            .toNewsModel()
+                    )
                     is Result.Error -> UiState.Error(result.message)
                     is Result.Loading -> UiState.Loading
                 }
@@ -44,8 +48,7 @@ class GetNewsUseCase @Inject constructor(
                         Locale.ENGLISH
                     )
                 }
-            } catch (_: Exception) {
-            }
+            } catch (_: Exception) {}
 
             NewsModel(
                 id = dbo.id,
