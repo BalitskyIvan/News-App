@@ -6,7 +6,7 @@ data class NewsDTO(
 
 data class ArticlesDTO(
     val title: String,
-    val description: String,
+    val description: String? = null,
     val content: String? = null,
     val urlToImage: String? = null,
     val publishedAt: String
